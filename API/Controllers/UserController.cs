@@ -1,9 +1,19 @@
+using API.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class UserController : ControllerBase
+
+    [ApiController]
+    [Route("api/users")]
+    public class UsersController : ControllerBase
     {
+        private readonly DataContext _context;
+        public UsersController(DataContext context)
+        {
+            _context = context;
+        }
+
 
     }
 }
