@@ -5,6 +5,6 @@ namespace API.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Retired { get; set; }
+        public bool Retired { get; set; }
     }
 }

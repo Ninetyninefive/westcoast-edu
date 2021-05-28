@@ -27,8 +27,14 @@ namespace API.Controllers
             return Ok(await _unitOfWork.CourseRepository.GetCoursesAsync());
         }
 
+        [HttpGet("{search}")]
+        public async Task<ActionResult<IEnumerable<CourseViewModel>>> GetCoursesByNameSearchAsync(string search)
+        {
+            return Ok(await _unitOfWork.CourseRepository.GetCourseByNameAsync(search));
+        }
+
         [HttpPost("add")]
-        public async Task<ActionResult> AddCourse(Course model)
+        public async Task<ActionResult> AddCourse(AddNewCourseViewModel model)
         {
             try
             {
@@ -54,7 +60,7 @@ namespace API.Controllers
 
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult> UpdateCourse(int id, UpdateCourseViewModel model)
+        public async Task<ActionResult> UpdateCourse(int id, CourseViewModel model)
         {
             try
             {
@@ -77,7 +83,7 @@ namespace API.Controllers
         }
 
         [HttpPatch("retire/{id}")]
-        public async Task<ActionResult> RetireCourse(int id, RetireCourseViewModel model)
+        public async Task<ActionResult> RetireCourse(int id, CourseViewModel model)
         {
             try
             {

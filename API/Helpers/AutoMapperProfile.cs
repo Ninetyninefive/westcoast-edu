@@ -10,7 +10,23 @@ namespace API.Helpers
         {
 
             CreateMap<User, UserViewModel>();
+            CreateMap<UserViewModel, User>();
+
             CreateMap<Course, CourseViewModel>();
+            CreateMap<CourseViewModel, Course>();
+
+            CreateMap<Course, UpdateCourseViewModel>();
+            CreateMap<UpdateCourseViewModel, Course>();
+
+            CreateMap<CourseViewModel, UpdateCourseViewModel>();
+            CreateMap<UpdateCourseViewModel, CourseViewModel>();
+
+            CreateMap<Course, RetireCourseViewModel>();
+            CreateMap<RetireCourseViewModel, Course>();
+
+            CreateMap<CourseViewModel, RetireCourseViewModel>();
+            CreateMap<RetireCourseViewModel, CourseViewModel>();
+
             /*
         CreateMap<Vehicle, VehicleViewModel>()
             .ForMember(dest => dest.RegNumber, opt => opt.MapFrom(src => src.RegistrationNumber))
