@@ -1,5 +1,10 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using API.Data;
+using API.Entities;
+using API.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -15,6 +20,25 @@ namespace API.Controllers
             _context = context;
         }
 
+        [HttpGet()]
+        public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
+        {
+            return await _context.Courses.ToListAsync();
+        }
 
+        [HttpPost()]
+        public async Task<ActionResult> AddCourse(AddNewCourseViewModel model)
+        {
+            var course = new Course
+            {
+                Name = model.Name,
+                Description = model.Description
+            };
+
+            _context.Courses.Add(course);
+            var result = await _context.SaveChangesAsync();
+
+            return StatusCode(201, course);
+        }
     }
 }
