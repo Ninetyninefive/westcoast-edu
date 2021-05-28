@@ -41,7 +41,7 @@ namespace API.Controllers
         [HttpPost()]
         public async Task<ActionResult> AddUser(AddNewUserViewModel model)
         {
-            var user = new User
+            var user = new AddNewUserViewModel
             {
                 Email = model.Email,
                 FirstName = model.FirstName,
@@ -50,11 +50,10 @@ namespace API.Controllers
                 PhoneNumber = model.PhoneNumber
             };
 
-            _context.Users.Add(user);
+            _userRepo.Add(user);
 
-            var result = await _context.SaveChangesAsync();
-
-            return StatusCode(201, user);
+            if (await _userRepo.SaveAllAsync()) return StatusCode(201, user);
+                return StatusCode(500, "Det gick inte.");
         }
     }
 }
