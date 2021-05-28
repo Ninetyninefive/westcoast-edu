@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Entities;
 using API.Interfaces;
+using API.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -16,7 +17,7 @@ namespace API.Data
             _context = context;
         }
 
-        public void Add(Course model)
+        public void Add(AddNewCourseViewModel model)
         {
             _context.Entry(model).State = EntityState.Added;
         }
@@ -28,27 +29,22 @@ namespace API.Data
 
         public async Task<Course> GetCourseByNameAsync(string name)
         {
-            throw new System.NotImplementedException();
+            return await _context.Courses.SingleAsync(c => c.Name.ToLower() == name.ToLower());
         }
 
         public async Task<IEnumerable<Course>> GetCoursesAsync()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<Course> RetireCourseByIdAsync(int id)
-        {
-            throw new System.NotImplementedException();
+            return await _context.Courses.ToListAsync();
         }
 
         public async Task<bool> SaveAllAsync()
         {
-            throw new System.NotImplementedException();
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public void Update(Course model)
+        public void Update(UpdateCourseViewModel model)
         {
-            throw new System.NotImplementedException();
+            _context.Entry(model).State = EntityState.Modified;
         }
     }
 }

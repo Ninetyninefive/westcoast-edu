@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Entities;
+using API.ViewModels;
 
 namespace API.Interfaces
 {
@@ -10,7 +11,7 @@ namespace API.Interfaces
         Task<User> GetUserByIdAsync(int id);
         Task<IEnumerable<User>> GetUsersAsync();
         Task<bool> SaveAllAsync();
-        void Add(User model);
+        void Add(AddNewUserViewModel model);
         void Update(User model);
     }
 }

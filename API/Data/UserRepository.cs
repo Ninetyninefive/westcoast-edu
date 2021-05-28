@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.Entities;
 using API.Interfaces;
+using API.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -14,7 +15,7 @@ namespace API.Data
         {
             _context = context;
         }
-        public void Add(User model)
+        public void Add(AddNewUserViewModel model)
         {
             _context.Entry(model).State = EntityState.Added;
         }
