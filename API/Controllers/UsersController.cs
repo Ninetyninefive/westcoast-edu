@@ -20,19 +20,7 @@ namespace API.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        /*
-        private readonly IUserRepository _userRepo;
-        public UsersController(IUserRepository userRepo)
-        {
-            _userRepo = userRepo;
-        }
-        
-        private readonly DataContext _context;
-        public UsersController(DataContext context)
-        {
-            _context = context;
-        }
-*/
+
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -61,22 +49,6 @@ namespace API.Controllers
             }
 
             return StatusCode(500, "Gick inte att spara Användaren");
-
-            /*
-            var user = new User
-            {
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Address = model.Address,
-                PhoneNumber = model.PhoneNumber
-            };
-
-            _userRepo.Add(user);
-
-            if (await _userRepo.SaveAllAsync()) return StatusCode(201, user);
-            return StatusCode(500, "Det gick inte.");
-        */
         }
     }
 }

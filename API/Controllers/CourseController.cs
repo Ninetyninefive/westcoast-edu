@@ -20,52 +20,36 @@ namespace API.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        /*
-        private readonly ICourseRepository _courseRepo;
-        public CoursesController(ICourseRepository courseRepo)
-        {
-            _courseRepo = courseRepo;
-        }
-        
-        private readonly DataContext _context;
-        public CoursesController(DataContext context)
-        {
-            _context = context;
-        }
-        */
+
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
+        public async Task<ActionResult<IEnumerable<CourseViewModel>>> GetCourses()
         {
             return Ok(await _unitOfWork.CourseRepository.GetCoursesAsync());
         }
 
         [HttpPost("add")]
-        public async Task<ActionResult> AddCourse(AddNewCourseViewModel model)
+        public async Task<ActionResult> AddCourse(Course model)
         {
-            var course = await _unitOfWork.CourseRepository.GetCourseByNameAsync(model.Name);
-
-            if (course.Name == model.Name) return BadRequest($"Kursen {model.Name} finns redan i systemet");
-
-            _unitOfWork.CourseRepository.Add(model);
-
-            //if (await _unitOfWork.VehicleRepository.SaveAllAsync())
-            if (await _unitOfWork.Complete())
+            try
             {
-                return StatusCode(201);
+                var course = await _unitOfWork.CourseRepository.GetCourseByNameAsync(model.Name);
+
+                if (course.Name == model.Name) return BadRequest($"Kursen {model.Name} finns redan i systemet");
+
+                _unitOfWork.CourseRepository.Add(model);
+
+                //if (await _unitOfWork.VehicleRepository.SaveAllAsync())
+                if (await _unitOfWork.Complete())
+                {
+                    return StatusCode(201);
+                }
+                return StatusCode(500, "Gick inte att spara fordonet");
             }
 
-            return StatusCode(500, "Gick inte att spara fordonet");
-            /*
-            var course = new Course
+            catch (Exception ex)
             {
-                Name = model.Name,
-                Description = model.Description
-            };
-
-            _courseRepo.Add(course);
-            if (await _courseRepo.SaveAllAsync()) return StatusCode(201, course);
-            return StatusCode(500, "Det gick inte.");
-            */
+                return StatusCode(500, ex.Message);
+            }
         }
 
 
@@ -74,15 +58,15 @@ namespace API.Controllers
         {
             try
             {
-                var course = await _courseRepo.GetCourseByIdAsync(id);
+                var course = await _unitOfWork.CourseRepository.GetCourseByIdAsync(id);
                 if (course == null) { return NotFound($"Kunde inte hitta kursen i systemet med {id}!"); }
 
                 course.Name = model.Name;
                 course.Description = model.Description;
 
-                _courseRepo.Update(course);
+                _unitOfWork.CourseRepository.Update(course);
 
-                if (await _courseRepo.SaveAllAsync()) return NoContent();
+                if (await _unitOfWork.CourseRepository.SaveAllAsync()) return NoContent();
                 return StatusCode(500, "Det gick inte att uppdatera kursen!");
             }
 
@@ -97,14 +81,14 @@ namespace API.Controllers
         {
             try
             {
-                var course = await _courseRepo.GetCourseByIdAsync(id);
+                var course = await _unitOfWork.CourseRepository.GetCourseByIdAsync(id);
                 if (course == null) { return NotFound($"Kunde inte hitta kursen i systemet med {id}!"); }
 
                 course.Retired = !course.Retired;
 
-                _courseRepo.Update(course);
+                _unitOfWork.CourseRepository.Update(course);
 
-                if (await _courseRepo.SaveAllAsync()) return NoContent();
+                if (await _unitOfWork.CourseRepository.SaveAllAsync()) return NoContent();
                 return StatusCode(500, "Det gick inte att uppdatera kursen!");
             }
 
