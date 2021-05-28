@@ -15,7 +15,7 @@ namespace API.Data
         {
             _context = context;
         }
-        public void Add(AddNewUserViewModel model)
+        public void Add(User model)
         {
             _context.Entry(model).State = EntityState.Added;
         }

@@ -11,7 +11,7 @@ namespace API.Interfaces
         Task<User> GetUserByIdAsync(int id);
         Task<IEnumerable<User>> GetUsersAsync();
         Task<bool> SaveAllAsync();
-        void Add(AddNewUserViewModel model);
+        void Add(User model);
         void Update(User model);
     }
 }

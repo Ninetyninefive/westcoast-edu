@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 namespace API.ViewModels
 {
     public class AddNewUserViewModel : UserBaseViewModel
