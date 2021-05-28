@@ -17,7 +17,7 @@ namespace API.Data
             _context = context;
         }
 
-        public void Add(AddNewCourseViewModel model)
+        public void Add(Course model)
         {
             _context.Entry(model).State = EntityState.Added;
         }
@@ -42,7 +42,7 @@ namespace API.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public void Update(UpdateCourseViewModel model)
+        public void Update(Course model)
         {
             _context.Entry(model).State = EntityState.Modified;
         }

@@ -11,7 +11,7 @@ namespace API.Interfaces
         Task<Course> GetCourseByIdAsync(int id);
         Task<IEnumerable<Course>> GetCoursesAsync();
         Task<bool> SaveAllAsync();
-        void Add(AddNewCourseViewModel model);
-        void Update(UpdateCourseViewModel model);
+        void Add(Course model);
+        void Update(Course model);
     }
 }
