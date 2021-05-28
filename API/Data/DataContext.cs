@@ -9,7 +9,7 @@ namespace API.Data
         public DbSet<Course> Courses { get; set; }
         public DataContext(DbContextOptions options) : base(options)
         {
-            
+
         }
     }
 }
