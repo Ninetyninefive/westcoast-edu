@@ -1,0 +1,17 @@
+namespace API.Data
+{
+    public class scratch
+    {
+                public async Task<IEnumerable<CourseViewModel>> GetCourseByNameSearchAsync(string namesearch)
+        {
+            return await _context.Courses
+            .ProjectTo<CourseViewModel>(_mapper.ConfigurationProvider)
+            .Where(course => course.Name.Contains(namesearch.Trim()))
+            .ToListAsync();
+        }
+
+        [HttpGet("{search}")]         public async Task<ActionResult<IEnumerable<CourseViewModel>>> GetCoursesByNameSearchAsync(string search)         {             return Ok(await _unitOfWork.CourseRepository.GetCourseByNameAsync(search));         }
+    
+    Task<IEnumerable<CourseViewModel>> GetCourseByNameSearchAsync(string name);
+    }
+}

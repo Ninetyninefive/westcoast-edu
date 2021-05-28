@@ -4,6 +4,7 @@ using API.Entities;
 using API.Interfaces;
 using API.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace API.Data
 {
@@ -25,6 +26,13 @@ namespace API.Data
         public async Task<Course> GetCourseByIdAsync(int id)
         {
             return await _context.Courses.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Course>> GetCourseByNameSearchAsync(string namesearch)
+        {
+            return await _context.Courses
+            .Where(course => course.Name.Contains(namesearch.Trim()))
+            .ToListAsync();
         }
 
         public async Task<Course> GetCourseByNameAsync(string name)

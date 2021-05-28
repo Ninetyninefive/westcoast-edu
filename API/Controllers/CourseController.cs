@@ -7,6 +7,7 @@ using API.Interfaces;
 using API.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -46,6 +47,11 @@ namespace API.Controllers
             return StatusCode(500, "Det gick inte.");
         }
 
+        [HttpGet("{search}")]
+        public async Task<ActionResult<IEnumerable<Course>>> GetCoursesByNameSearchAsync(string search)
+        {
+            return Ok(await _courseRepo.GetCourseByNameAsync(search));
+        }
 
         [HttpPatch("{id}")]
         public async Task<ActionResult> UpdateCourse(int id, UpdateCourseViewModel model)
