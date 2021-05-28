@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using API.Entities;
 using API.Interfaces;
 using API.ViewModels;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -10,19 +11,26 @@ namespace API.Data
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public UserRepository(DataContext context)
+        public UserRepository(DataContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
-        public void Add(User model)
+        public void Add(AddNewUserViewModel model)
         {
+            var userToAdd = _mapper.Map<User>(model, opt =>
+            {
+                opt.Items["repo"] = _context;
+            });
             _context.Entry(model).State = EntityState.Added;
         }
 
         public async Task<User> GetUserByIdAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users
+            .SingleOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<User> GetUSerByEmailAsync(string search)

@@ -14,12 +14,19 @@ namespace API.Controllers
     [Route("api/courses")]
     public class CoursesController : ControllerBase
     {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CoursesController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+        /*
         private readonly ICourseRepository _courseRepo;
         public CoursesController(ICourseRepository courseRepo)
         {
             _courseRepo = courseRepo;
         }
-        /*
+        
         private readonly DataContext _context;
         public CoursesController(DataContext context)
         {
@@ -29,12 +36,26 @@ namespace API.Controllers
         [HttpGet("list")]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
-            return Ok(await _courseRepo.GetCoursesAsync());
+            return Ok(await _unitOfWork.CourseRepository.GetCoursesAsync());
         }
 
         [HttpPost("add")]
         public async Task<ActionResult> AddCourse(AddNewCourseViewModel model)
         {
+            var course = await _unitOfWork.CourseRepository.GetCourseByNameAsync(model.Name);
+
+            if (course.Name == model.Name) return BadRequest($"Kursen {model.Name} finns redan i systemet");
+
+            _unitOfWork.CourseRepository.Add(model);
+
+            //if (await _unitOfWork.VehicleRepository.SaveAllAsync())
+            if (await _unitOfWork.Complete())
+            {
+                return StatusCode(201);
+            }
+
+            return StatusCode(500, "Gick inte att spara fordonet");
+            /*
             var course = new Course
             {
                 Name = model.Name,
@@ -44,6 +65,7 @@ namespace API.Controllers
             _courseRepo.Add(course);
             if (await _courseRepo.SaveAllAsync()) return StatusCode(201, course);
             return StatusCode(500, "Det gick inte.");
+            */
         }
 
 

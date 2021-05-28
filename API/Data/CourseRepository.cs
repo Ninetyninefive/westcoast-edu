@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using API.Entities;
 using API.Interfaces;
 using API.ViewModels;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -11,9 +12,11 @@ namespace API.Data
     {
 
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public CourseRepository(DataContext context)
+        public CourseRepository(DataContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
 
@@ -44,7 +47,12 @@ namespace API.Data
 
         public void Update(Course model)
         {
-            _context.Entry(model).State = EntityState.Modified;
+            //_context.Entry(model).State = EntityState.Modified;
+            var courseToUpdate = _mapper.Map<Course>(model, opt =>
+            {
+                opt.Items["repo"] = _context;
+            });
+            _context.Entry(courseToUpdate).State = EntityState.Modified;
         }
     }
 }
