@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace API.Entities
 {
+    [Table("Course", Schema = "Courses")]
     public class Course
     {
         public int Id { get; set; }

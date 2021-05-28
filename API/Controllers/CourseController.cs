@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-
-
     [ApiController]
     [Route("api/courses")]
     public class CoursesController : ControllerBase
@@ -39,6 +37,35 @@ namespace API.Controllers
             var result = await _context.SaveChangesAsync();
 
             return StatusCode(201, course);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> UpdateCourse(int id, UpdateCourseViewModel model)
+        {
+            var course = await _context.Courses.FindAsync(id);
+
+            course.Name = model.Name;
+            course.Description = model.Description;
+
+            _context.Courses.Update(course);
+
+            var result = _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPatch("retire/{id}")]
+        public async Task<ActionResult> RetireCourse(int id, RetireCourseViewModel model)
+        {
+            var course = await _context.Courses.FindAsync(id);
+
+            course.Retired = model.Retired;
+
+            _context.Courses.Update(course);
+
+            var result = _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

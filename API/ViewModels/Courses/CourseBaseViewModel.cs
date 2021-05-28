@@ -6,6 +6,5 @@ namespace API.ViewModels
     {
         [Required]
         public string Name { get; set; }
-        public bool Retired { get; set; }
     }
 }
