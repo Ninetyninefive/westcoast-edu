@@ -18,7 +18,7 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet()]
+        [HttpGet("list")]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
             return await _context.Courses.ToListAsync();

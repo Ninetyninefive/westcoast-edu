@@ -6,10 +6,9 @@ namespace API.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User> GetCourseByNameAsync(string name);
-        Task<User> GetCourseByIdAsync(int id);
-        Task<User> RetireCourseByIdAsync(int id);
-        Task<IEnumerable<User>> GetCoursesAsync();
+        Task<User> GetUSerByEmailAsync(string name);
+        Task<User> GetUserByIdAsync(int id);
+        Task<IEnumerable<User>> GetUsersAsync();
         Task<bool> SaveAllAsync();
         void Add(User model);
         void Update(User model);

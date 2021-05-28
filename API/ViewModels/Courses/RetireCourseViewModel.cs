@@ -1,6 +1,6 @@
 namespace API.ViewModels
 {
-    public class RetireCourseViewModel : CourseBaseViewModel
+    public class RetireCourseViewModel
     {
         public bool Retired { get; set; }
     }
