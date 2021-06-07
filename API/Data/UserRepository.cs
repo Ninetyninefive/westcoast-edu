@@ -4,7 +4,9 @@ using API.Entities;
 using API.Interfaces;
 using API.ViewModels;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace API.Data
 {
@@ -24,23 +26,35 @@ namespace API.Data
             {
                 opt.Items["repo"] = _context;
             });
-            _context.Entry(model).State = EntityState.Added;
+            _context.Entry(userToAdd).State = EntityState.Added;
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<UserViewModel> GetUserByIdAsync(int id)
         {
             return await _context.Users
+            .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
             .SingleOrDefaultAsync(c => c.Id == id);
         }
-
-        public async Task<User> GetUSerByEmailAsync(string search)
+        public async Task<IEnumerable<UserViewModel>> GetUserByEmailSearchAsync(string emailSearch)
         {
-            return await _context.Users.SingleAsync(c => c.Email.ToLower() == search.ToLower());
+            return await _context.Users
+            .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
+            .Where(user => user.Email.Contains(emailSearch.Trim()))
+            .ToListAsync();
         }
 
-        public async Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<IEnumerable<UserViewModel>> GetUserByPhoneSearchAsync(string phoneSearch)
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+            .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
+            .Where(user => user.PhoneNumber.Contains(phoneSearch.Trim()))
+            .ToListAsync();
+        }
+        public async Task<IEnumerable<UserViewModel>> GetUsersAsync()
+        {
+            return await _context.Users
+            .ProjectTo<UserViewModel>(_mapper.ConfigurationProvider)
+            .ToListAsync();
         }
 
         public async Task<bool> SaveAllAsync()
@@ -48,7 +62,7 @@ namespace API.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public void Update(User model)
+        public void Update(UserViewModel model)
         {
             _context.Entry(model).State = EntityState.Modified;
         }

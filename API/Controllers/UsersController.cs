@@ -21,11 +21,7 @@ namespace API.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
-        {
-            return Ok(await _unitOfWork.UserRepository.GetUserByIdAsync(id));
-        }
+
 
         [HttpGet("list")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
@@ -33,12 +29,28 @@ namespace API.Controllers
             return Ok(await _unitOfWork.UserRepository.GetUsersAsync());
         }
 
-        [HttpPost()]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUser(int id)
+        {
+            return Ok(await _unitOfWork.UserRepository.GetUserByIdAsync(id));
+        }
+
+        [HttpGet("email/{searchEmail}")]
+        public async Task<ActionResult<IEnumerable<UserViewModel>>> GetUserByEmailSearchAsync(string searchEmail)
+        {
+            return Ok(await _unitOfWork.UserRepository.GetUserByEmailSearchAsync(searchEmail));
+        }
+
+        [HttpGet("phone/{searchPhone}")]
+        public async Task<ActionResult<IEnumerable<UserViewModel>>> GetUserByPhoneSearchAsync(string searchPhone)
+        {
+            return Ok(await _unitOfWork.UserRepository.GetUserByPhoneSearchAsync(searchPhone));
+        }
+
+        [HttpPost("add")]
         public async Task<ActionResult> AddUser(AddNewUserViewModel model)
         {
-            var user = await _unitOfWork.UserRepository.GetUSerByEmailAsync(model.Email);
-
-            if (user.Email == model.Email) return BadRequest($"{model.Email} är upptagen och finns redan i systemet");
+            //var course = await _unitOfWork.CourseRepository.GetCourseByNameAsync(model.Name);
 
             _unitOfWork.UserRepository.Add(model);
 
@@ -47,8 +59,7 @@ namespace API.Controllers
             {
                 return StatusCode(201);
             }
-
-            return StatusCode(500, "Gick inte att spara Användaren");
+            return StatusCode(500, "Det gick inte att spara kursen");
         }
     }
 }

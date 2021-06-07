@@ -15,34 +15,30 @@ namespace API.Helpers
             CreateMap<Course, CourseViewModel>();
             CreateMap<CourseViewModel, Course>();
 
-            CreateMap<Course, UpdateCourseViewModel>();
-            CreateMap<UpdateCourseViewModel, Course>();
+            CreateMap<AddNewCourseViewModel, Course>();
+            CreateMap<AddNewCourseViewModel, CourseViewModel>();
 
-            CreateMap<CourseViewModel, UpdateCourseViewModel>();
+            CreateMap<UpdateCourseViewModel, Course>();
             CreateMap<UpdateCourseViewModel, CourseViewModel>();
 
-            CreateMap<Course, RetireCourseViewModel>();
             CreateMap<RetireCourseViewModel, Course>();
-
-            CreateMap<CourseViewModel, RetireCourseViewModel>();
             CreateMap<RetireCourseViewModel, CourseViewModel>();
 
-            /*
-        CreateMap<Vehicle, VehicleViewModel>()
-            .ForMember(dest => dest.RegNumber, opt => opt.MapFrom(src => src.RegistrationNumber))
-            .ForMember(dest => dest.Make, opt => opt.MapFrom(src => src.Make.Name))
-            .ForMember(dest => dest.VehicleModel, opt => opt.MapFrom(src => src.VehicleModel.Name));
+            CreateMap<AddNewUserViewModel, User>();
+            CreateMap<AddNewUserViewModel, UserViewModel>();
 
-        CreateMap<AddVehicleViewModel, Vehicle>();
+            //CreateMap<UpdateCourseViewModel, Course>();
+            //CreateMap<UpdateCourseViewModel, CourseViewModel>();
+            //CreateMap<CourseViewModel, UpdateCourseViewModel>();
+            //CreateMap<Course, UpdateCourseViewModel>();
 
-        CreateMap<VehicleViewModel, Vehicle>()
-            .ForMember(dest => dest.Make, opt => opt.MapFrom<VehicleMakeResolver>())
-            .ForMember(dest => dest.VehicleModel, opt => opt.MapFrom<VehicleModelResolver>());
 
-        CreateMap<AddVehicleViewModel, Vehicle>()
-            .ForMember(dest => dest.Make, opt => opt.MapFrom<AddVehicleMakeResolver>())
-            .ForMember(dest => dest.VehicleModel, opt => opt.MapFrom<AddVehicleModelResolver>());
-        */
+
+            //CreateMap<Course, RetireCourseViewModel>();
+            //CreateMap<RetireCourseViewModel, Course>();
+
+            //CreateMap<CourseViewModel, RetireCourseViewModel>();
+            //CreateMap<RetireCourseViewModel, CourseViewModel>();
         }
     }
 }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using API.Data;
 using API.Entities;
+using AutoMapper;
 using API.Interfaces;
 using API.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -27,81 +29,55 @@ namespace API.Controllers
             return Ok(await _unitOfWork.CourseRepository.GetCoursesAsync());
         }
 
-        [HttpGet("{search}")]
-        public async Task<ActionResult<IEnumerable<CourseViewModel>>> GetCoursesByNameSearchAsync(string search)
+        [HttpGet("{searchString}")]
+        public async Task<ActionResult<IEnumerable<CourseViewModel>>> GetCoursesByNameSearchAsync(string searchString)
         {
-            return Ok(await _unitOfWork.CourseRepository.GetCourseByNameAsync(search));
+            return Ok(await _unitOfWork.CourseRepository.GetCourseByNameSearchAsync(searchString));
         }
 
         [HttpPost("add")]
         public async Task<ActionResult> AddCourse(AddNewCourseViewModel model)
         {
-            try
+            //var course = await _unitOfWork.CourseRepository.GetCourseByNameAsync(model.Name);
+
+            _unitOfWork.CourseRepository.Add(model);
+
+            //if (await _unitOfWork.VehicleRepository.SaveAllAsync())
+            if (await _unitOfWork.Complete())
             {
-                var course = await _unitOfWork.CourseRepository.GetCourseByNameAsync(model.Name);
-
-                if (course.Name == model.Name) return BadRequest($"Kursen {model.Name} finns redan i systemet");
-
-                _unitOfWork.CourseRepository.Add(model);
-
-                //if (await _unitOfWork.VehicleRepository.SaveAllAsync())
-                if (await _unitOfWork.Complete())
-                {
-                    return StatusCode(201);
-                }
-                return StatusCode(500, "Gick inte att spara fordonet");
+                return StatusCode(201);
             }
-
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return StatusCode(500, "Det gick inte att spara kursen");
         }
 
-
         [HttpPatch("{id}")]
-        public async Task<ActionResult> UpdateCourse(int id, CourseViewModel model)
+        public async Task<ActionResult> UpdateCourse(int id, UpdateCourseViewModel model)
         {
-            try
-            {
-                var course = await _unitOfWork.CourseRepository.GetCourseByIdAsync(id);
-                if (course == null) { return NotFound($"Kunde inte hitta kursen i systemet med {id}!"); }
 
-                course.Name = model.Name;
-                course.Description = model.Description;
+            var course = await _unitOfWork.CourseRepository.GetCourseByIdAsync(id);
 
-                _unitOfWork.CourseRepository.Update(course);
+            course.Name = model.Name;
+            course.Description = model.Description;
 
-                if (await _unitOfWork.CourseRepository.SaveAllAsync()) return NoContent();
-                return StatusCode(500, "Det gick inte att uppdatera kursen!");
-            }
+            _unitOfWork.CourseRepository.Update(course);
+            if (await _unitOfWork.Complete()) return NoContent();
 
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            return StatusCode(500, "Det gick inte att uppdatera fordonet");
+
         }
 
         [HttpPatch("retire/{id}")]
-        public async Task<ActionResult> RetireCourse(int id, CourseViewModel model)
+        public async Task<ActionResult> RetireCourse(int id, RetireCourseViewModel model)
         {
-            try
-            {
-                var course = await _unitOfWork.CourseRepository.GetCourseByIdAsync(id);
-                if (course == null) { return NotFound($"Kunde inte hitta kursen i systemet med {id}!"); }
+            var course = await _unitOfWork.CourseRepository.GetCourseByIdAsync(id);
+            if (course == null) { return NotFound($"Kunde inte hitta kursen i systemet med {id}!"); }
 
-                course.Retired = !course.Retired;
+            course.Retired = !course.Retired;
 
-                _unitOfWork.CourseRepository.Update(course);
+            _unitOfWork.CourseRepository.Update(course);
 
-                if (await _unitOfWork.CourseRepository.SaveAllAsync()) return NoContent();
-                return StatusCode(500, "Det gick inte att uppdatera kursen!");
-            }
-
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            if (await _unitOfWork.CourseRepository.SaveAllAsync()) return NoContent();
+            return StatusCode(500, "Det gick inte att uppdatera kursen!");
         }
     }
 }

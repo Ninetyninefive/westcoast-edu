@@ -24,7 +24,11 @@ namespace API.Data
 
         public void Add(AddNewCourseViewModel model)
         {
-            _context.Entry(model).State = EntityState.Added;
+            var courseToAdd = _mapper.Map<Course>(model, opt =>
+            {
+                opt.Items["repo"] = _context;
+            });
+            _context.Entry(courseToAdd).State = EntityState.Added;
         }
 
         public async Task<CourseViewModel> GetCourseByIdAsync(int id)
@@ -40,11 +44,11 @@ namespace API.Data
             .SingleOrDefaultAsync(c => c.Name == name);
         }
 
-        public async Task<IEnumerable<CourseViewModel>> GetCourseByNameSearchAsync(string namesearch)
+        public async Task<IEnumerable<CourseViewModel>> GetCourseByNameSearchAsync(string nameSearch)
         {
             return await _context.Courses
             .ProjectTo<CourseViewModel>(_mapper.ConfigurationProvider)
-            .Where(course => course.Name.Contains(namesearch.Trim()))
+            .Where(course => course.Name.Contains(nameSearch.Trim()))
             .ToListAsync();
         }
 
@@ -63,7 +67,7 @@ namespace API.Data
         public void Update(CourseViewModel model)
         {
             //_context.Entry(model).State = EntityState.Modified;
-            var courseToUpdate = _mapper.Map<CourseViewModel>(model, opt =>
+            var courseToUpdate = _mapper.Map<Course>(model, opt =>
             {
                 opt.Items["repo"] = _context;
             });

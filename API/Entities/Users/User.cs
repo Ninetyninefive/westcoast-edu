@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
+
 namespace API.Entities
 {
     [Table("User", Schema = "Users")]

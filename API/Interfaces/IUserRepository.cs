@@ -7,11 +7,12 @@ namespace API.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User> GetUSerByEmailAsync(string name);
-        Task<User> GetUserByIdAsync(int id);
-        Task<IEnumerable<User>> GetUsersAsync();
+        Task<UserViewModel> GetUserByIdAsync(int id);
+        Task<IEnumerable<UserViewModel>> GetUsersAsync();
+        Task<IEnumerable<UserViewModel>> GetUserByEmailSearchAsync(string emailSearch);
+        Task<IEnumerable<UserViewModel>> GetUserByPhoneSearchAsync(string phoneSearch);
         Task<bool> SaveAllAsync();
         void Add(AddNewUserViewModel model);
-        void Update(User model);
+        void Update(UserViewModel model);
     }
 }
